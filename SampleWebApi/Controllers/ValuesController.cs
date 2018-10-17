@@ -1,39 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using ClassLibrary1;
 using System.Web.Http;
 
 namespace SampleWebApi.Controllers
 {
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        readonly NotificationLog _notificationLog = new NotificationLog();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="documentNotification"></param>
+        [HttpPost]
+        [Route("api/values/incoming-document-message")]
+        public void UnconmingMessage([FromBody] DocumentNotification documentNotification)
         {
-            return new string[] { "value1", "value2" };
+            
+            _notificationLog.WriteDocumentNotification(Newtonsoft.Json.JsonConvert.SerializeObject(documentNotification));
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="batchNotification"></param>
+        [HttpPost]
+        [Route("api/values/incoming-batch-notification")]
+        public void UncomingBatchNotification([FromBody] BatchNotification batchNotification)
         {
-            return "value";
+
+            _notificationLog.WriteBatchNotification(Newtonsoft.Json.JsonConvert.SerializeObject(batchNotification));
         }
 
-        // POST api/values
-        public void Post([FromBody]string value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="batchNotification"></param>
+        [HttpPost]
+        [Route("api/values/incoming-batch-index-notification")]
+        public void IncommingBatchWhenIndex([FromBody] BatchNotification batchNotification)
         {
+
+            _notificationLog.WriteBatchIndexNotification(Newtonsoft.Json.JsonConvert.SerializeObject(batchNotification));
         }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="documentNotification"></param>
+        [HttpPost]
+        [Route("api/values/incoming-document-index-message")]
+        public void UnconmingDocumentIndexMessage([FromBody] DocumentNotification documentNotification)
         {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
+            _notificationLog.WriteDocumentIndexNotification(Newtonsoft.Json.JsonConvert.SerializeObject(documentNotification));
         }
     }
 }
